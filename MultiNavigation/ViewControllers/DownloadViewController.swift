@@ -53,7 +53,8 @@ class DownloadViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     //    avFundation.startTime()
-    downloadImage(imageUrl: "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png")
+    //    downloadImage(imageUrl: "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png")
+    getJsonDataFromFile()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -75,6 +76,13 @@ class DownloadViewController: UIViewController {
         debugPrint("downloadImage Error occured")
       }
     }.resume()
+  }
+  
+  func getJsonDataFromFile() {
+    guard let path = Bundle.main.path(forResource: "DataWithImages", ofType: "json"),
+          let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
+          let jsonData = try? JSONSerialization.jsonObject(with: data) else { return }
+    debugPrint("Json Extracted from File : \(jsonData)")
   }
   
 }
