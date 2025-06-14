@@ -1,0 +1,56 @@
+{
+  "success": true,
+  "data": {
+    "pran": "900010050486",
+    "planType": "CUSTOM",
+    "investmentOption": "AUTO",
+    "holdings": [
+      {
+        "assetClass": "E",
+        "schemeCode": "SM011001",
+        "pfmId": "PFM011",
+        "percentage": 25.0,
+        "fundName": "Tata Pension Management Private Limited",
+        "units": 123.23,
+        "investedValue": 15000.0,
+        "currentValue": 15400.0,
+        "xirr": 12.0,
+        "logoUrl": "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png"
+      },
+      {
+        "assetClass": "C",
+        "schemeCode": "SM011002",
+        "pfmId": "PFM011",
+        "percentage": 50.0,
+        "fundName": "Tata Pension Management Private Limited",
+        "units": 123.23,
+        "investedValue": 30000.0,
+        "currentValue": 31000.0,
+        "xirr": 12.0,
+        "logoUrl": "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png"
+      },
+      {
+        "assetClass": "G",
+        "schemeCode": "SM011003",
+        "pfmId": "PFM011",
+        "percentage": 25.0,
+        "fundName": "Tata Pension Management Private Limited",
+        "units": 123.23,
+        "investedValue": 15000.0,
+        "currentValue": 16100.0,
+        "xirr": 12.0,
+        "logoUrl": "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png"
+      }
+    ],
+    "returns": {
+      "maturityAmount": 2946407.34,
+      "pensionPerMonth": 6874.95,
+      "investedAmount": 60000.0,
+      "interestEarned": 2886407.34,
+      "lumpsum": 4714251.74
+    },
+    "investedAmountFy": 110815.2,
+    "withdrawalEligibility": "NOT_ELIGIBLE"
+  }
+}
+
