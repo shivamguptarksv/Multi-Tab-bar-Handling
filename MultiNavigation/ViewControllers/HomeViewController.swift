@@ -21,7 +21,6 @@ class HomeViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .systemRed
     configureView()
   }
   
@@ -52,9 +51,11 @@ class HomeViewController: UIViewController {
   
   @objc func handleNextPage() {
     //        navigationController?.pushViewController(NextViewController(), animated: true)
-    navigationController?.modalPresentationStyle = .custom
-    navigationController?.modalPresentationCapturesStatusBarAppearance = true
-    present(NextViewController(), animated: true)
+    let viewController = NextViewController()
+    viewController.modalPresentationStyle = .custom
+    viewController.transitioningDelegate = self
+    viewController.modalPresentationCapturesStatusBarAppearance = true
+    navigationController?.present(viewController, animated: true)
   }
   
 }
@@ -84,30 +85,11 @@ private extension RemoteDataHelper {
   
 }
 
-/*
- 
- // MARK: - DataModels
- 
- struct CoinBaseDataModel: Decodable {
- 
- let name: String
- let symbol: String
- let is_new: Bool
- let is_active: Bool
- let type: String
- 
- }
- 
- do {
- let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
- 
- if let dictionary = json as? [String: Any] {
- let name = dictionary["name"] as? String
- let age = dictionary["age"] as? Int
- 
- print("Name: \(name ?? "N/A"), Age: \(age ?? 0)")
- }
- } catch {
- print("JSON parsing error: \(error)")
- }
- */
+extension HomeViewController: UIViewControllerTransitioningDelegate {
+  
+  func presentationController(forPresented presented: UIViewController,
+                              presenting: UIViewController?,
+                              source: UIViewController) -> UIPresentationController? {
+    SheetPresentationController(presentedViewController: presented, presenting: presenting)
+  }
+}

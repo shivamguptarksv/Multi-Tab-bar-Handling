@@ -10,6 +10,8 @@ import WebKit
 
 class DownloadViewController: UIViewController {
   
+  private let imagecache = NSCache<AnyObject, UIImage>()
+  
   private let avFundation = AVFoundationSingleton()
   private var webView: WKWebView!
   
@@ -55,7 +57,7 @@ class DownloadViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     //    avFundation.startTime()
-    //    downloadImage(imageUrl: "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png")
+    downloadImage(imageUrl: "https://assets.uat1.upstox.com/content/assets/images/nps/PFM011.png")
     getJsonDataFromFile()
   }
   
@@ -93,7 +95,7 @@ extension JsonDataHelper {
     guard let path = Bundle.main.path(forResource: "DataWithImages", ofType: "json"),
           let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
           let jsonData = try? JSONSerialization.jsonObject(with: data) else { return }
-    debugPrint("Json Extracted from File : \(jsonData)")
+    //    debugPrint("Json Extracted from File : \(jsonData)")
   }
   
 }
@@ -105,13 +107,25 @@ extension ImageDownloadHelper {
   
   func downloadImage(imageUrl: String) {
     guard let url = URL(string: imageUrl) else { return }
-    URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
+    var urlRequest = URLRequest(url: url)
+    urlRequest.cachePolicy = .returnCacheDataElseLoad
+    if let cacheImage = imagecache.object(forKey: url as AnyObject) {
+      print("✅ Loaded from cache")
+      DispatchQueue.main.async {
+        self.imageView.image = cacheImage
+      }
+    } else {
+      print("🔄 Downloaded from network")
+    }
+    URLSession.shared.dataTask(with: urlRequest) { data, response, error in
       if error == nil,
          let data {
         DispatchQueue.main.async {
-          self.imageView.image = UIImage(data: data)
+          if let image = UIImage(data: data) {
+            self.imageView.image = image
+            self.imagecache.setObject(image, forKey: url as AnyObject)
+          }
         }
-        debugPrint("downloadImage scccess: \(data)")
       } else {
         self.imageView.image = UIImage(systemName: "home")
         debugPrint("downloadImage Error occured")
