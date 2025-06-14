@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import WebKit
 
 class DownloadViewController: UIViewController {
   
   private let avFundation = AVFoundationSingleton()
+  private var webView: WKWebView!
   
   private let imageView: UIImageView = {
     let imageView = UIImageView()
@@ -62,6 +64,45 @@ class DownloadViewController: UIViewController {
     //    avFundation.endTime()
   }
   
+}
+
+// MARK: - JsonDataHelper
+
+private typealias WebViewHelper = DownloadViewController
+extension WebViewHelper {
+  
+  func intializeWebView() {
+    webView = WKWebView(frame: view.bounds)
+    webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    view.addSubview(webView)
+  }
+  
+  func openWebView(with urlString: String) {
+    guard let url = URL(string: urlString) else { return }
+    webView.load(URLRequest(url: url))
+  }
+  
+}
+
+// MARK: - JsonDataHelper
+
+private typealias JsonDataHelper = DownloadViewController
+extension JsonDataHelper {
+  
+  func getJsonDataFromFile() {
+    guard let path = Bundle.main.path(forResource: "DataWithImages", ofType: "json"),
+          let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
+          let jsonData = try? JSONSerialization.jsonObject(with: data) else { return }
+    debugPrint("Json Extracted from File : \(jsonData)")
+  }
+  
+}
+
+// MARK: - JsonDataHelper
+
+private typealias ImageDownloadHelper = DownloadViewController
+extension ImageDownloadHelper {
+  
   func downloadImage(imageUrl: String) {
     guard let url = URL(string: imageUrl) else { return }
     URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
@@ -76,13 +117,6 @@ class DownloadViewController: UIViewController {
         debugPrint("downloadImage Error occured")
       }
     }.resume()
-  }
-  
-  func getJsonDataFromFile() {
-    guard let path = Bundle.main.path(forResource: "DataWithImages", ofType: "json"),
-          let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe),
-          let jsonData = try? JSONSerialization.jsonObject(with: data) else { return }
-    debugPrint("Json Extracted from File : \(jsonData)")
   }
   
 }
